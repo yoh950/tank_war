@@ -33,8 +33,10 @@ class challenger:
 		self.image = pygame.transform.rotate(self.image, self.or_to_angle[self.orientation])
 		window.blit(self.image, position)
 
-	def shoot(self, direction):
-		self.picture = pygame.image.load("assets/images/shell.png").convert_alpha()
+	def shoot(self):
+		rotate = self.convert_dir_to_angle(self.or_to_angle[self.orientation], self.or_to_angle[new_or])
+		new_shell = shell(self.gun_power, self.or_to_angle[self.orientation], 10, (self.position_x + self.image.get_width() / 2, self.position_y + 250), "assets/images/shell.png")
+		return new_shell
 
 	def take_damage(self, damage):
 		self.life -= damage
@@ -66,6 +68,17 @@ class challenger:
 class warrior(challenger):
 	pass
 
+class shell:
+	def __init__(self, damage, direction, speed, position, picture):
+		self.damage = damage
+		self.direction = direction
+		self.speed = speed
+		self.position_x = position[0]
+		self.position_y = position[1]
+		self.image = pygame.image.load(picture).convert_alpha()
+		window.blit(self.image, position)
+
+
 window.fill(grey)
 player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), "left")
 game_over = False
@@ -73,6 +86,7 @@ pygame.key.set_repeat(150,25)
 while not game_over:
 	y_move = 0 
 	x_move = 0
+	mun = None
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			game_over= True
@@ -86,9 +100,13 @@ while not game_over:
 				x_move = 1
 			if event.key == pygame.K_LEFT:
 				x_move = -1
+			if event.key == pygame.K_SPACE:
+				mun = player.shoot()
 	player.move((x_move, y_move))
 	window.fill(grey)
 	window.blit(player.image, (player.position_x, player.position_y))
+	if mun != None:
+		window.blit(mun.image, (mun.position_x, mun.position_y))
 	pygame.display.flip()
 
 
