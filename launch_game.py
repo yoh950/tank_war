@@ -54,9 +54,9 @@ class challenger:
 			new_pos_x = self.position_x + direction[0] * self.speed
 			new_pos_y = self.position_y + direction[1] * self.speed
 			if new_pos_y > 0 and new_pos_y < height - self.image.get_height() :
-				self.position_x += direction[0] * self.speed
+				self.position_y = new_pos_y
 			if new_pos_x > 0 and new_pos_x < width - self.image.get_width() :
-				self.position_y += direction[1] * self.speed
+				self.position_x = new_pos_x
 		else:
 			self.orientation = new_or
 			self.image = pygame.transform.rotate(self.image, rotate)
@@ -69,7 +69,7 @@ class warrior(challenger):
 window.fill(grey)
 player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), "left")
 game_over = False
-pygame.key.set_repeat(150,250)
+pygame.key.set_repeat(150,25)
 while not game_over:
 	y_move = 0 
 	x_move = 0
