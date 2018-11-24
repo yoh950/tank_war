@@ -36,6 +36,7 @@ class challenger:
 	def move(self, direction):
 		self.position_x += direction[0] * self.speed
 		self.position_y += direction[1] * self.speed
+	
 		
 
 class warrior(challenger):
@@ -44,7 +45,7 @@ class warrior(challenger):
 window.fill(grey)
 player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), 180)
 game_over = False
-
+pygame.key.set_repeat(150,250)
 while not game_over:
 	y_move = 0 
 	x_move = 0
