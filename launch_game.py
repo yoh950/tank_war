@@ -30,12 +30,19 @@ class challenger:
 		self.picture = pygame.image.load("assets/images/shell.png").convert_alpha()
 
 	def take_damage(self, damage):
-    		self.life -= damage
+		self.life -= damage
 
 	def move(self, direction):
-		self.position[0] += direction[0]
-		self.position[1] += direction[1]
-		
+    	new_or = self.orientation
+		if direction[0] > 0 : new_or = 270
+		elif direction[0] < 0: new_or = 90
+		if direction[1] > 0 : new_or = 180
+		elif direction[1] < 0: new_or = 0
+		if new_or != self.orientation:
+			self.position[0] += direction[0]
+			self.position[1] += direction[1]
+		else:
+    		self.orientation = new_or
 
 class warrior(challenger):
 	pass
