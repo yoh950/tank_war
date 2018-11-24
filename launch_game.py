@@ -24,7 +24,13 @@ class challenger:
 		self.position_y = position[1]
 		self.orientation = orientation
 		self.image = pygame.image.load(picture).convert_alpha()
-		self.image = pygame.transform.rotate(self.image, self.orientation)
+		self.or_to_angle = {
+			"up":0,
+			"left":90,
+			"down":180,
+			"right":270
+			}
+		self.image = pygame.transform.rotate(self.image, self.or_to_angle[self.orientation])
 		window.blit(self.image, position)
 
 	def shoot(self, direction):
@@ -34,22 +40,34 @@ class challenger:
 		self.life -= damage
 
 	def move(self, direction):
-			new_or = self.orientation
-			if direction[0] > 0 : new_or = 270
-			elif direction[0] < 0: new_or = 90
-			if direction[1] > 0 : new_or = 180
-			elif direction[1] < 0: new_or = 0
-			if new_or == self.orientation:
-    			self.position_x += direction[0] * self.speed
+		new_or = self.orientation
+		if direction[0] > 0 :
+			new_or = "right"
+		elif direction[0] < 0:
+			new_or = "left"
+		elif direction[1] > 0 :
+			new_or = "down"
+		elif direction[1] < 0:
+			new_or = "up"
+		rotate = self.convert_dir_to_angle(self.or_to_angle[self.orientation], self.or_to_angle[new_or])
+		if rotate == 360:
+			new_pos_x = self.position_x + direction[0] * self.speed
+			new_pos_y = self.position_y + direction[1] * self.speed
+			if new_pos_y > 0 and new_pos_y < height - self.image.get_height() :
+				self.position_x += direction[0] * self.speed
+			if new_pos_x > 0 and new_pos_x < width - self.image.get_width() :
 				self.position_y += direction[1] * self.speed
-			else:
-    			self.orientation = new_or
+		else:
+			self.orientation = new_or
+			self.image = pygame.transform.rotate(self.image, rotate)
 
+	def convert_dir_to_angle(self, orientation, angle):
+    		return 360 - orientation + angle
 class warrior(challenger):
 	pass
 
 window.fill(grey)
-player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), 180)
+player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), "left")
 game_over = False
 pygame.key.set_repeat(150,250)
 while not game_over:
@@ -74,6 +92,6 @@ while not game_over:
 	pygame.display.flip()
 
 
-		 
-		
+
+
 
