@@ -20,7 +20,8 @@ class challenger:
 		self.speed = speed
 		self.life = life
 		self.picture = picture
-		self.position = position
+		self.position_x = position[0]
+		self.position_y = position[1]
 		self.orientation = orientation
 		self.image = pygame.image.load(picture).convert_alpha()
 		self.image = pygame.transform.rotate(self.image, self.orientation)
@@ -33,37 +34,43 @@ class challenger:
 		self.life -= damage
 
 	def move(self, direction):
-    	new_or = self.orientation
-		if direction[0] > 0 : new_or = 270
-		elif direction[0] < 0: new_or = 90
-		if direction[1] > 0 : new_or = 180
-		elif direction[1] < 0: new_or = 0
-		if new_or != self.orientation:
-			self.position[0] += direction[0]
-			self.position[1] += direction[1]
-		else:
-    		self.orientation = new_or
+			new_or = self.orientation
+			if direction[0] > 0 : new_or = 270
+			elif direction[0] < 0: new_or = 90
+			if direction[1] > 0 : new_or = 180
+			elif direction[1] < 0: new_or = 0
+			if new_or == self.orientation:
+    			self.position_x += direction[0] * self.speed
+				self.position_y += direction[1] * self.speed
+			else:
+    			self.orientation = new_or
 
 class warrior(challenger):
 	pass
 
 window.fill(grey)
-player = challenger(5, 1, 100, "assets/images/player.png",(width/2, height/2), 180)
+player = challenger(5, 10, 100, "assets/images/player.png",(width/2, height/2), 180)
 game_over = False
 
 while not game_over:
+	y_move = 0 
+	x_move = 0
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			game_over= True
 
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_UP:
-				y_move = 1
-
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_DOWN:
 				y_move = -1
-
+			if event.key == pygame.K_DOWN:
+				y_move = 1
+			if event.key == pygame.K_RIGHT:
+				x_move = 1
+			if event.key == pygame.K_LEFT:
+				x_move = -1
+	player.move((x_move, y_move))
+	window.fill(grey)
+	window.blit(player.image, (player.position_x, player.position_y))
 	pygame.display.flip()
 
 
