@@ -15,14 +15,16 @@ tank = pygame.image.load("assets/images/player.png").convert_alpha()
 
 
 class challenger:
-	def __init__(self, gun_power, speed, life, picture, position):
+	def __init__(self, gun_power, speed, life, picture, position, orientation):
 		self.gun_power = gun_power
 		self.speed = speed
 		self.life = life
 		self.picture = picture
 		self.position = position
-		self.obj = pygame.image.load(picture).convert_alpha()
-		window.blit(self.obj, position)
+		self.orientation = orientation
+		self.image = pygame.image.load(picture).convert_alpha()
+		self.image = pygame.transform.rotate(self.image, self.orientation)
+		window.blit(self.image, position)
 
 	def shoot(self, direction):
 		self.picture = pygame.image.load("assets/images/shell.png").convert_alpha()
@@ -33,12 +35,13 @@ class challenger:
 	def move(self, direction):
 		self.position[0] += direction[0]
 		self.position[1] += direction[1]
+		
 
 class warrior(challenger):
 	pass
 
 window.fill(grey)
-player = challenger(5, 1, 100, "assets/images/player.png",(width/2, height/2))
+player = challenger(5, 1, 100, "assets/images/player.png",(width/2, height/2), 180)
 game_over = False
 
 while not game_over:
